@@ -27,7 +27,11 @@ flag pedantic
 executable toolbox
   hs-source-dirs:       src
   main-is:              Main.hs
-  -- other-modules:
+
+  other-modules:
+      Main.Options
+    , Main.Type.Options
+    , Main.Type.Options.Lens
 
   default-language:     Haskell2010
   other-extensions:
@@ -40,11 +44,15 @@ executable toolbox
   build-depends:
       base >=4.6 && <5
     , filepath
+    , transformers
 
 --  , aeson
     , command ==0.1.*
+    , endo
     , gtk >= 0.10.0
     , here
+    , lens
+    , optparse-applicative
 
   ghc-options:          -Wall
   if flag(pedantic)
