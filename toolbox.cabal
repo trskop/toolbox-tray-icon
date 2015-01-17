@@ -19,6 +19,11 @@ extra-source-files:
 data-dir:               data
 data-files:             icons/*.png
 
+flag pedantic
+  description:          Pass additional warning flags to GHC.
+  default:              False
+  manual:               True
+
 executable toolbox
   hs-source-dirs:       src
   main-is:              Main.hs
@@ -41,3 +46,9 @@ executable toolbox
     , here
 
   ghc-options:          -Wall
+  if flag(pedantic)
+    ghc-options:
+      -fwarn-tabs
+      -fwarn-implicit-prelude
+      -fwarn-missing-import-lists
+--    -Werror
