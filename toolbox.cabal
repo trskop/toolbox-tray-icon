@@ -33,6 +33,7 @@ executable toolbox
   other-extensions:
       DeriveDataTypeable
     , NamedFieldPuns
+    , NoImplicitPrelude
     , QuasiQuotes
     , RecordWildCards
 

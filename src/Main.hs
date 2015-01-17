@@ -1,16 +1,22 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
 module Main (main)
   where
 
-import Control.Applicative ((<$>))
-import Control.Monad (when)
-import Data.Maybe (fromJust)
+import Control.Monad (Monad((>>=)), mapM_, when)
+import Data.Eq (Eq((/=)))
+import Data.Function ((.), ($), flip)
+import Data.Functor ((<$>))
+import Data.List (concatMap)
+import Data.Maybe (Maybe(Nothing), fromJust)
+import Data.String (String)
 import Data.Typeable (Typeable)
 import System.Command (cmd)
-import System.Exit (ExitCode(..), exitSuccess)
+import System.Exit (ExitCode(ExitSuccess), exitSuccess)
+import System.IO (IO, print)
 
 import System.FilePath ((</>))
 
