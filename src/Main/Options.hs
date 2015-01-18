@@ -27,14 +27,17 @@ import Data.List (null)
 import Data.Maybe (Maybe)
 import Data.Monoid (Monoid(mempty), (<>))
 import Data.String (String)
-import System.IO (IO)
+import System.IO (IO, FilePath)
 
 import Control.Lens (set)
 import Data.Monoid.Endo (E, Endo(appEndo))
 import Data.Monoid.Endo.Fold ((<&$>), foldEndo)
 import Options.Applicative
     ( InfoMod
+    , Mod
+    , OptionFields
     , Parser
+    , ReadM
     , eitherReader
     , execParserPure
     , handleParseResult
@@ -49,7 +52,7 @@ import Options.Applicative
     )
 
 import Main.Type.Options (Options)
-import Main.Type.Options.Lens (configFile)
+import Main.Type.Options.Lens (configFile, iconFile)
 
 
 -- | Type alias for wrapped 'Parser'. It is used so to avoid orphan instances.
@@ -60,6 +63,9 @@ parser' = IdentityT
 
 fromParser' :: Parser' a -> Parser a
 fromParser' = runIdentityT
+
+optionalOption :: ReadM a -> Mod OptionFields a -> Parser' (Maybe a)
+optionalOption r = parser' . optional . option r
 
 -- | Alternative to 'Options.Applicative.Extra.execParser' from
 -- <http://hackage.haskell.org/package/optparse-applicative optparse-applicative>
@@ -75,11 +81,19 @@ optionsParser = fromParser' $ appEndo <&$> foldEndo
 
 -- | Parse @--config=FILE@ option.
 configFileOption :: Parser' (Maybe (E Options))
-configFileOption = parser' . optional . option (set configFile <$> parseFilePath)
+configFileOption = optionalOption (set configFile <$> parseFilePath)
     $ short 'c' <> long "config" <> metavar "FILE"
     <> help "Use specified FILE instead of default configuration file."
-  where
-    parseFilePath = eitherReader $ \s ->
-        if null s
-            then Left "Option argument can not be empty file path."
-            else Right s
+
+-- | Parse @--icon=FILE@ option.
+iconFileOption :: Parser' (Maybe (E Options))
+iconFileOption = optionalOption (set iconFile <$> parseFilePath)
+    $ short 'i' <> long "icon" <> metavar "FILE"
+    <> help "Instead of default icon use FILE."
+
+-- | Parse file path argument to an option.
+parseFilePath :: ReadM FilePath
+parseFilePath = eitherReader $ \s ->
+    if null s
+        then Left "Option argument can not be empty file path."
+        else Right s

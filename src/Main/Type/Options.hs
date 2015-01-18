@@ -17,5 +17,10 @@ import System.IO (FilePath)
 import Text.Show (Show)
 
 
-data Options = Options {configFile :: FilePath}
+data Options = Options
+    { configFile :: FilePath
+    -- ^ Configuration file path.
+    , iconFile :: FilePath
+    -- ^ Icon displayed in system tray.
+    }
   deriving (Show)
