@@ -1,6 +1,21 @@
 {-# LANGUAGE NoImplicitPrelude #-}
+-- |
+-- Module:       $HEADER$
+-- Description:  Parsing of command line options
+-- Copyright:    (c) 2015 Peter Trško
+-- License:      BSD3
+--
+-- Maintainer:   peter.trsko@gmail.com
+-- Stability:    experimental
+-- Portability:  NoImplicitPrelude
+--
+-- Parsing of command line options and utility functions for
+-- <http://hackage.haskell.org/package/optparse-applicative optparse-applicative>
+-- package.
 module Main.Options
-    (optionsParser, execParser)
+    ( optionsParser
+    , execParser
+    )
   where
 
 import Control.Applicative (Applicative((<*>)))
@@ -37,6 +52,7 @@ import Main.Type.Options (Options)
 import Main.Type.Options.Lens (configFile)
 
 
+-- | Type alias for wrapped 'Parser'. It is used so to avoid orphan instances.
 type Parser' = IdentityT Parser
 
 parser' :: Parser a -> Parser' a
@@ -45,14 +61,19 @@ parser' = IdentityT
 fromParser' :: Parser' a -> Parser a
 fromParser' = runIdentityT
 
+-- | Alternative to 'Options.Applicative.Extra.execParser' from
+-- <http://hackage.haskell.org/package/optparse-applicative optparse-applicative>
+-- package.
 execParser :: Parser a -> InfoMod a -> [String] -> IO a
 execParser parser infoMod =
     handleParseResult . execParserPure (prefs mempty) (info parser infoMod)
 
+-- | Parser for command line options.
 optionsParser :: Parser (E Options)
 optionsParser = fromParser' $ appEndo <&$> foldEndo
     <*> configFileOption
 
+-- | Parse @--config=FILE@ option.
 configFileOption :: Parser' (Maybe (E Options))
 configFileOption = parser' . optional . option (set configFile <$> parseFilePath)
     $ short 'c' <> long "config" <> metavar "FILE"
