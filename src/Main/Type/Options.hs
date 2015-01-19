@@ -16,6 +16,8 @@ module Main.Type.Options (Options(..))
 import System.IO (FilePath)
 import Text.Show (Show)
 
+import Data.Default.Class (Default(def))
+
 
 data Options = Options
     { configFile :: FilePath
@@ -24,3 +26,6 @@ data Options = Options
     -- ^ Icon displayed in system tray.
     }
   deriving (Show)
+
+instance Default Options where
+    def = Options "" ""
