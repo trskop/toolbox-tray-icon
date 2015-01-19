@@ -17,7 +17,7 @@ extra-source-files:
   , README.md
 
 data-dir:               data
-data-files:             icons/*.png
+data-files:             icons/*.png, toolbox-menu.json
 
 flag pedantic
   description:          Pass additional warning flags to GHC.
@@ -29,7 +29,8 @@ executable toolbox
   main-is:              Main.hs
 
   other-modules:
-      Main.Options
+      Main.ConfigFile
+    , Main.Options
     , Main.Type.MenuItem
     , Main.Type.MenuItem.Lens
     , Main.Type.Options
@@ -38,13 +39,13 @@ executable toolbox
   default-language:     Haskell2010
   other-extensions:
       DeriveDataTypeable
-    , NamedFieldPuns
+    , DeriveGeneric
     , NoImplicitPrelude
     , QuasiQuotes
-    , RecordWildCards
 
   build-depends:
       base >=4.6 && <5
+    , bytestring
     , filepath
     , transformers
 
