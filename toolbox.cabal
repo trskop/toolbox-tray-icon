@@ -2,12 +2,12 @@ name:                   toolbox
 version:                0.1.0.0
 synopsis:               Tray icon with configurable popup menu
 -- description:
-homepage:               https://github.com/trskop/toolbox
+homepage:               https://github.com/trskop/toolbox-tray-icon
 license:                BSD3
 license-file:           LICENSE
 author:                 Peter Trško
 maintainer:             peter.trsko@gmail.com
-copyright:              (c) 2015 Peter Trško
+copyright:              (c) 2015, Peter Trško
 category:               Utility
 build-type:             Simple
 cabal-version:          >=1.10
@@ -24,9 +24,18 @@ flag pedantic
   default:              False
   manual:               True
 
+flag wx
+  description:          Use wxHaskell backend instead of GTK.
+  default:              False
+  manual:               True
+
 executable toolbox
   hs-source-dirs:       src
-  main-is:              Main.hs
+
+  if flag(wx)
+    main-is:            WxMain.hs
+  else
+    main-is:            Main.hs
 
   other-modules:
       Main.ConfigFile
@@ -53,10 +62,19 @@ executable toolbox
     , aeson
     , data-default-class ==0.0.*
     , endo
-    , gtk >= 0.10.0
     , here
     , lens
     , optparse-applicative
+
+  if flag(wx)
+    build-depends:
+        wx >= 0.91.0.0
+      , wxcore >= 0.91.0.0
+      -- ^ Lower bound is the latest version at the time of writing.
+  else
+    build-depends:
+        gtk >= 0.10.0
+        -- ^ Lower bound is just u guess. Tested with gtk-0.13.4.
 
   ghc-options:          -Wall
   if flag(pedantic)
@@ -65,3 +83,7 @@ executable toolbox
       -fwarn-implicit-prelude
       -fwarn-missing-import-lists
 --    -Werror
+
+source-repository head
+  type:                 git
+  location:             git://github.com/trskop/toolbox-tray-icon.git
