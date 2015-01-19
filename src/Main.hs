@@ -25,8 +25,7 @@ import Data.List ((++), concatMap)
 import Data.Maybe (Maybe(Nothing), fromJust)
 import Data.String (String)
 import System.Exit (exitFailure, exitSuccess)
-import System.IO (IO, hPutStrLn, stderr)
-import Text.Show (Show(show))
+import System.IO (IO, hPrint, hPutStrLn, stderr)
 
 import System.FilePath ((</>))
 import System.Process (system)
@@ -111,8 +110,7 @@ main = do
   where
     menuPopup' = flip menuPopup Nothing
 
-    handleExceptions = handle $ \e ->
-        hPutStrLn stderr $ show (e :: SomeException)
+    handleExceptions = handle $ \e -> hPrint stderr (e :: SomeException)
 
     createMenuItem :: ActionGroup -> MenuItem -> IO ()
     createMenuItem group item = createMenuItem' group
