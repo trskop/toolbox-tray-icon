@@ -30,6 +30,8 @@ executable toolbox
 
   other-modules:
       Main.Options
+    , Main.Type.MenuItem
+    , Main.Type.MenuItem.Lens
     , Main.Type.Options
     , Main.Type.Options.Lens
 
@@ -46,8 +48,9 @@ executable toolbox
     , filepath
     , transformers
 
---  , aeson
+    , aeson
     , command ==0.1.*
+    , data-default-class ==0.0.*
     , endo
     , gtk >= 0.10.0
     , here
