@@ -30,7 +30,8 @@ import Data.String (String)
 import System.IO (IO, FilePath)
 
 import Control.Lens (set)
-import Data.Monoid.Endo (E, Endo(appEndo))
+import Data.Default.Class (Default(def))
+import Data.Monoid.Endo (E, runEndo)
 import Data.Monoid.Endo.Fold ((<&$>), foldEndo)
 import Options.Applicative
     ( InfoMod
@@ -75,9 +76,10 @@ execParser parser infoMod =
     handleParseResult . execParserPure (prefs mempty) (info parser infoMod)
 
 -- | Parser for command line options.
-optionsParser :: Parser (E Options)
-optionsParser = fromParser' $ appEndo <&$> foldEndo
+optionsParser :: Parser Options
+optionsParser = fromParser' $ runEndo def <&$> foldEndo
     <*> configFileOption
+    <*> iconFileOption
 
 -- | Parse @--config=FILE@ option.
 configFileOption :: Parser' (Maybe (E Options))
