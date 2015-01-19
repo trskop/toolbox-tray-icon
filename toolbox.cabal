@@ -47,10 +47,10 @@ executable toolbox
       base >=4.6 && <5
     , bytestring
     , filepath
+    , process
     , transformers
 
     , aeson
-    , command ==0.1.*
     , data-default-class ==0.0.*
     , endo
     , gtk >= 0.10.0
