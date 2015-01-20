@@ -24,18 +24,9 @@ flag pedantic
   default:              False
   manual:               True
 
-flag wx
-  description:          Use wxHaskell backend instead of GTK.
-  default:              False
-  manual:               True
-
-executable toolbox
+executable toolbox-gtk
   hs-source-dirs:       src
-
-  if flag(wx)
-    main-is:            WxMain.hs
-  else
-    main-is:            Main.hs
+  main-is:              GtkMain.hs
 
   other-modules:
       Main.ConfigFile
@@ -66,15 +57,57 @@ executable toolbox
     , lens
     , optparse-applicative
 
-  if flag(wx)
-    build-depends:
-        wx >= 0.91.0.0
-      , wxcore >= 0.91.0.0
-      -- ^ Lower bound is the latest version at the time of writing.
-  else
-    build-depends:
-        gtk >= 0.10.0
-        -- ^ Lower bound is just u guess. Tested with gtk-0.13.4.
+    -- {{{ GTK-specific dependencies ------------------------------------------
+    , gtk >= 0.10.0
+    -- ^ Lower bound is just u guess. Tested with gtk-0.13.4.
+    -- }}} GTK-specific dependencies ------------------------------------------
+
+  ghc-options:          -Wall
+  if flag(pedantic)
+    ghc-options:
+      -fwarn-tabs
+      -fwarn-implicit-prelude
+      -fwarn-missing-import-lists
+--    -Werror
+
+executable toolbox-wx
+  hs-source-dirs:       src
+  main-is:              WxMain.hs
+
+  other-modules:
+      Main.ConfigFile
+    , Main.Options
+    , Main.Type.MenuItem
+    , Main.Type.MenuItem.Lens
+    , Main.Type.Options
+    , Main.Type.Options.Lens
+
+  default-language:     Haskell2010
+  other-extensions:
+      DeriveDataTypeable
+    , DeriveGeneric
+    , NoImplicitPrelude
+    , QuasiQuotes
+
+  build-depends:
+      base >=4.6 && <5
+    , bytestring
+    , filepath
+    , process
+    , transformers
+
+    , aeson
+    , data-default-class ==0.0.*
+    , endo
+    , here
+    , lens
+    , optparse-applicative
+
+    -- {{{ wx-specific dependencies -------------------------------------------
+    , wx >= 0.91.0.0
+    , wxcore >= 0.91.0.0
+    -- ^ Lower bound is the latest version at the time of writing.
+    -- }}} wx-specific dependencies -------------------------------------------
 
   ghc-options:          -Wall
   if flag(pedantic)
