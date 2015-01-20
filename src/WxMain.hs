@@ -2,18 +2,26 @@
 module Main (main)
   where
 
-import Control.Monad (Monad((>>=), return))
+import Control.Exception (SomeException, handle)
+import Control.Monad (Monad((>>=), return), (=<<), mapM_, void)
 import Data.Bool ((||), otherwise)
+import Data.Either (Either(Left, Right))
 import Data.Eq (Eq((==)))
-import Data.Function (($), flip)
+import Data.Function ((.), ($), flip)
 import Data.Functor ((<$))
+import Data.Monoid ((<>))
 import Data.String (String)
-import System.Exit (exitSuccess)
-import System.IO (IO)
+import System.Environment (getArgs)
+import System.Exit (exitFailure, exitSuccess)
+import System.IO (IO, hPrint, hPutStrLn, stderr)
+
+import System.FilePath ((</>))
 import System.Process (system)
 
+import Control.Lens ((^.), foldMapOf)
 import Graphics.UI.WX
-    ( Prop((:=))
+    ( Menu
+    , Prop((:=))
     , command
     , help
     , menuItem
@@ -34,6 +42,18 @@ import Graphics.UI.WXCore.WxcClasses
     )
 import Graphics.UI.WXCore.WxcClassTypes (Icon, TaskBarIcon)
 import Graphics.UI.WXCore.WxcTypes (sizeNull)
+import Options.Applicative (fullDesc)
+
+import Main.ConfigFile (readConfigFile)
+import Main.Options (execParser, optionsParser)
+import Main.Type.MenuItem (MenuItem)
+import Main.Type.MenuItem.Lens (menuItems)
+import qualified Main.Type.MenuItem.Lens as MenuItem
+    ( command
+    , description
+    , name
+    )
+import qualified Main.Type.Options.Lens as Options (iconFile)
 
 import Paths_toolbox (getDataFileName)
 
@@ -42,41 +62,51 @@ taskBarIcon
     :: Icon ()
     -> String
     -> (TaskBarIcon () -> EventTaskBarIcon -> IO ())
-    -> IO (TaskBarIcon ())
+    -> IO ()
 taskBarIcon icon str f = do
     tbi <- taskBarIconCreate
     _ <- taskBarIconSetIcon tbi icon str
     evtHandlerOnTaskBarIconEvent tbi $ f tbi
-    return tbi
 
-taskBarIcon_
-    :: Icon ()
-    -> String
-    -> (TaskBarIcon () -> EventTaskBarIcon -> IO ())
-    -> IO ()
-taskBarIcon_ icon str f = () <$ taskBarIcon icon str f
+main :: IO ()
+main = getArgs >>= execParser optionsParser fullDesc >>= \options -> start $ do
+    menu <- readConfigFile getDataFileName options >>= \r -> case r of
+        Right x  -> return x
+        Left msg -> do
+            hPutStrLn stderr $ "Parsing configuration failed: " <> msg
+            exitFailure
 
-main :: IO()
-main = start $ do
-    icon <- getDataFileName iconFile >>= flip iconCreateFromFile sizeNull
-    taskBarIcon_ icon "Toolbox" $ \tbi evt -> case evt of
-      _ |    evt == TaskBarIconLeftDown
-            || evt == TaskBarIconRightDown -> do
-                toolboxMenu <- menuPane [text := "Toolbox"]
-                _ <- menuItem toolboxMenu
-                    [ text := "Firefox ProfileManager (no remote)"
-                    , help := "Something"
-                    , on command :=
-                        (() <$ system "firefox -no-remote -ProfileManager &")
-                    ]
-                _ <- menuItem toolboxMenu
-                    [ text := "Exit toolbox"
-                    , on command := exitSuccess
-                    ]
-                _ <- taskBarIconPopupMenu tbi toolboxMenu
-                return ()
+    icon <- flip iconCreateFromFile sizeNull
+        =<< case options ^. Options.iconFile of
+            fileName@(c : _)
+              | c == '/'  -> return fileName
+              | otherwise -> getDataFileName fileName
+            ""            -> getDataFileName $ "icons" </> iconFileName
 
-        | otherwise                      -> return ()
+    toolboxMenu <- menuPane [text := "Toolbox"]
+    foldMapOf menuItems (mapM_ $ addMenuItem toolboxMenu) menu
+    addMenuItem' toolboxMenu "Exit toolbox" "Exit toolbox" exitSuccess
+
+    taskBarIcon icon "Toolbox" $ \tbi evt -> case evt of
+        _ | evt == TaskBarIconLeftDown || evt == TaskBarIconRightDown
+            -> () <$ taskBarIconPopupMenu tbi toolboxMenu
+          | otherwise
+            -> return ()
   where
---  iconFile = "icons/guillendesign-variations-3-tools-icon.png"
-    iconFile = "icons/elegantthemes-tools-icon.png"
+    iconFileName = "elegantthemes-tools-icon.png"
+--  iconFileName = "elegantthemes-beautiful-flat-icons-tools-icon.png"
+
+    handleExceptions = handle $ \e -> hPrint stderr (e :: SomeException)
+
+    addMenuItem :: Menu a -> MenuItem -> IO ()
+    addMenuItem m item = addMenuItem' m
+        (item ^. MenuItem.name)
+        (item ^. MenuItem.description)
+        . handleExceptions . void . system $ item ^. MenuItem.command
+
+    addMenuItem' :: Menu a -> String -> String -> IO () -> IO ()
+    addMenuItem' m name desc action = () <$ menuItem m
+        [ text       := name
+        , help       := desc
+        , on command := action
+        ]
