@@ -15,6 +15,9 @@ cabal-version:          >=1.10
 extra-source-files:
     ChangeLog.md
   , README.md
+  , data/icons/*.png.download
+  -- ^ These files contain information about icons, most importantly where they
+  -- were downloaded from, author and license.
 
 data-dir:               data
 data-files:             icons/*.png, toolbox-menu.json
