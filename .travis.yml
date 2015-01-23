@@ -9,7 +9,10 @@ before_install:
   - sudo apt-get install -qq libgtk2.0-dev libwxgtk3.0-dev libwxgtk-media3.0-dev
 
 install:
-  - cabal install gtk2hs-buildtools
+  # gtk2hs-buildtools-0.13.0.3 depends on alex >= 3.0.1, happy >= 1.18.9,
+  # therefore it is necessary to get newer versions then default.
+  - cabal install alex happy
+  - cabal install gtk2hs-buildtools alex happy
   - cabal install --only-dependencies
 
 script:
