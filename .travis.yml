@@ -1,0 +1,17 @@
+language: haskell
+
+ghc:
+  # Older than GHC 7.8 aren't supported by the package.
+  - 7.8
+
+install:
+  - apt-get install libgtk2.0-dev libwxgtk3.0-dev libwxgtk-media3.0-dev
+  - cabal install gtk2hs-buildtools
+  - cabal install --only-dependencies
+
+script:
+  # Option -fpedantic turns on additional wornings in addition to -Wall.
+  - cabal configure -fpedantic && cabal build
+
+  # Following line tests if sdist package is created correctly.
+  - cabal sdist && cabal install dist/toolbox-*.tar.gz
