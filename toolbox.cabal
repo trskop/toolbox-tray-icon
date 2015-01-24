@@ -18,6 +18,7 @@ extra-source-files:
   , data/icons/*.png.download
   -- ^ These files contain information about icons, most importantly where they
   -- were downloaded from, author and license.
+  , screenshot/*.png
 
 data-dir:               data
 data-files:             icons/*.png, toolbox-menu.json

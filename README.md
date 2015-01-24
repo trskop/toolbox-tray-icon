@@ -13,6 +13,13 @@ Description
 Tray icon with configurable popup menu.
 
 
+Screenshots
+-----------
+
+![Xfce screenshot without popup menu](screenshot/toolbox-tray-icon-xfce-01.png)
+![Xfce screenshot with popup menu](screenshot/toolbox-tray-icon-xfce-02.png)
+
+
 
 [Haskell.org]:
   http://www.haskell.org
