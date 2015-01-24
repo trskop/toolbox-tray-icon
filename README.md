@@ -107,16 +107,16 @@ directory:
 [GTK Homepage]:
   http://www.gtk.org/
   "GTK Homepage"
-[Hackage: alex]
+[Hackage: alex]:
   http://hackage.haskell.org/package/alex
   "alex Package on Hackage"
-[Hackage: gtk]
+[Hackage: gtk]:
   http://hackage.haskell.org/package/gtk
   "gtk Package on Hackage"
-[Hackage: gtk2hs-buildtools]
+[Hackage: gtk2hs-buildtools]:
   http://hackage.haskell.org/package/gtk2hs-buildtools
   "gtk2hs-buildtools Package on Hackage"
-[Hackage: happy]
+[Hackage: happy]:
   http://hackage.haskell.org/package/happy
   "happy Package on Hackage"
 [Haskell.org]:
@@ -128,6 +128,6 @@ directory:
 [tl;dr Legal: BSD3]:
   https://tldrlegal.com/license/bsd-3-clause-license-%28revised%29
   "BSD 3-Clause License (Revised)"
-[wxWidgets Homepage]
+[wxWidgets Homepage]:
   http://wxwidgets.org/
   "wxWidgets Homepage"
