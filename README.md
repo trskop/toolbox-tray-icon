@@ -23,11 +23,17 @@ Screenshots
 Configuration
 -------------
 
-Configuration file is a simple [JSON][json.org] file that resides in data
-directory, see [Cabal User Guide: Installation paths][] for details about what
-it means.
+Configuration file is a simple [JSON][json.org] file.
 
-Default configuration file is provided and it has following content:
+Basic configuration file resides in installation data directory, please see
+[Cabal User Guide: Installation paths][] for details about what it means. Its
+content is empty JSON array, i.e. `[]`.
+
+User configuration file is located in:
+
+    $HOME/.config/toolbox/toolbox-menu.json
+
+Example configuration file:
 
 ````json
 [ { "id": "firefox-profile-manager-no-remote"
