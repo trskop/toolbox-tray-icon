@@ -17,7 +17,6 @@ module Main (main)
 import Control.Exception (SomeException, handle)
 import Control.Monad (Monad(return, (>>=)), (=<<), mapM_, void)
 import Data.Bool (otherwise)
-import Data.Either (Either(Left, Right))
 import Data.Eq (Eq((==)))
 import Data.Function ((.), ($), flip)
 import Data.Functor ((<$>))
@@ -52,8 +51,9 @@ import Graphics.UI.Gtk.ActionMenuToolbar.UIManager
     )
 import Graphics.UI.Gtk.MenuComboToolbar.Menu (castToMenu, menuPopup)
 import Options.Applicative (fullDesc)
+import System.Environment.XDG.BaseDir (getUserConfigFile)
 
-import Main.ConfigFile (readConfigFile)
+import Main.ConfigFile (getMenuItems, readConfigFile, readUserConfigFile)
 import Main.Options (execParser, optionsParser)
 import Main.Type.MenuItem (MenuItem(MenuItem), MenuItems)
 import qualified Main.Type.MenuItem as MenuItem (MenuItem(id))
@@ -79,11 +79,10 @@ main :: IO()
 main = do
     options <- initGUI >>= execParser optionsParser fullDesc
 
-    menu <- readConfigFile getDataFileName options >>= \r -> case r of
-        Right x  -> return x
-        Left msg -> do
-            hPutStrLn stderr $ "Parsing configuration failed: " ++ msg
-            exitFailure
+    menu <- getMenuItems options onConfigError
+        [ readConfigFile getDataFileName
+        , readUserConfigFile (getUserConfigFile "toolbox")
+        ]
 
     icon <- statusIconNewFromFile =<< case options ^. Options.iconFile of
         fileName@(c : _)
@@ -123,3 +122,7 @@ main = do
         action <- actionNew itemId itemName Nothing Nothing
         _ <- on action actionActivated itemAction
         actionGroupAddAction group action
+
+    onConfigError msg = do
+        hPutStrLn stderr $ "Parsing configuration failed: " ++ msg
+        exitFailure

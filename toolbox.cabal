@@ -60,6 +60,7 @@ executable toolbox-gtk
     , here
     , lens
     , optparse-applicative
+    , xdg-basedir
 
     -- {{{ GTK-specific dependencies ------------------------------------------
     , gtk >= 0.10.0
@@ -106,6 +107,7 @@ executable toolbox-wx
     , here
     , lens
     , optparse-applicative
+    , xdg-basedir
 
     -- {{{ wx-specific dependencies -------------------------------------------
     , wx >= 0.91.0.0

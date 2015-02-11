@@ -13,16 +13,20 @@
 module Main.ConfigFile
     ( defaultConfigFileName
     , readConfigFile
+    , readUserConfigFile
     , readConfigFile'
+    , getMenuItems
     )
   where
 
-import Control.Monad (Monad(return), (=<<))
+import Control.Monad (Monad((>>=), return), (=<<))
 import Data.Bool (otherwise)
-import Data.Either (Either)
+import Data.Either (Either(Left, Right))
 import Data.Eq (Eq((==)))
-import Data.Function ((.))
+import Data.Foldable (Foldable, foldlM)
+import Data.Function ((.), const)
 import Data.Functor (Functor(fmap))
+import Data.Monoid (Monoid(mempty), (<>))
 import Data.String (String)
 import System.IO (IO, FilePath)
 
@@ -44,15 +48,17 @@ import Main.Type.MenuItem (MenuItems)
 defaultConfigFileName :: FilePath
 defaultConfigFileName = "toolbox-menu.json"
 
--- | Read configuration file either one provided with the installation or one
--- supplied by the user on command line.
-readConfigFile
-    :: (FilePath -> IO FilePath)
+-- | Generalized implementation of 'readConfigFile' and 'readUserConfigFile'.
+readConfigFileImpl
+    :: (Options -> FilePath)
+    -- ^ Get configuration file path supplied by the user. See e.g.
+    -- 'configFile'.
+    -> (FilePath -> IO FilePath)
     -- ^ Get absoulete file path for relative path to a config file. This is
     -- where 'Paths.toolbox.getDataFileName' would be used.
     -> Options
     -> IO (Either String MenuItems)
-readConfigFile f opts = readConfigFile' =<< case opts ^. configFile of
+readConfigFileImpl g f opts = readConfigFile' =<< case g opts of
     fileName@(c : _)
       | c == '/'  -> return fileName
         -- Leave absolute path as it is.
@@ -61,6 +67,41 @@ readConfigFile f opts = readConfigFile' =<< case opts ^. configFile of
     ""            -> f defaultConfigFileName
         -- Empty path means "use default configuration file."
 
+-- | Read configuration file either one provided with the installation or one
+-- supplied by the user on command line.
+readConfigFile
+    :: (FilePath -> IO FilePath)
+    -- ^ Get absoulete file path for relative path to a config file. This is
+    -- where 'Paths.toolbox.getDataFileName' would be used.
+    -> Options
+    -> IO (Either String MenuItems)
+readConfigFile = readConfigFileImpl (^. configFile)
+
+-- | Read user configuration file. This differs from system configuration file.
+readUserConfigFile
+    :: (FilePath -> IO FilePath)
+    -> Options
+    -> IO (Either String MenuItems)
+readUserConfigFile = readConfigFileImpl (const "")
+
 -- | Read and parse configuration file (JSON).
 readConfigFile' :: FilePath -> IO (Either String MenuItems)
 readConfigFile' = fmap eitherDecodeStrict' . readFile
+
+-- | Gather menu items from various side-effect sources and handle error cases.
+getMenuItems
+    :: Foldable f
+    => Options
+    -> (String -> IO MenuItems)
+    -- ^ Error handling function.
+    -> f (Options -> IO (Either String MenuItems))
+    -> IO MenuItems
+getMenuItems opts onError = foldlM go mempty
+  where
+    go :: MenuItems -> (Options -> IO (Either String MenuItems)) -> IO MenuItems
+    go items f = f opts >>= processResult items
+
+    processResult :: MenuItems -> Either String MenuItems -> IO MenuItems
+    processResult items r = case r of
+        Right x  -> return (items <> x)
+        Left msg -> onError msg

@@ -5,7 +5,6 @@ module Main (main)
 import Control.Exception (SomeException, handle)
 import Control.Monad (Monad((>>=), return), (=<<), mapM_, void)
 import Data.Bool ((||), otherwise)
-import Data.Either (Either(Left, Right))
 import Data.Eq (Eq((==)))
 import Data.Function ((.), ($), flip)
 import Data.Functor ((<$))
@@ -43,8 +42,9 @@ import Graphics.UI.WXCore.WxcClasses
 import Graphics.UI.WXCore.WxcClassTypes (Icon, TaskBarIcon)
 import Graphics.UI.WXCore.WxcTypes (sizeNull)
 import Options.Applicative (fullDesc)
+import System.Environment.XDG.BaseDir (getUserConfigFile)
 
-import Main.ConfigFile (readConfigFile)
+import Main.ConfigFile (getMenuItems, readConfigFile, readUserConfigFile)
 import Main.Options (execParser, optionsParser)
 import Main.Type.MenuItem (MenuItem)
 import Main.Type.MenuItem.Lens (menuItems)
@@ -70,11 +70,10 @@ taskBarIcon icon str f = do
 
 main :: IO ()
 main = getArgs >>= execParser optionsParser fullDesc >>= \options -> start $ do
-    menu <- readConfigFile getDataFileName options >>= \r -> case r of
-        Right x  -> return x
-        Left msg -> do
-            hPutStrLn stderr $ "Parsing configuration failed: " <> msg
-            exitFailure
+    menu <- getMenuItems options onConfigError
+        [ readConfigFile getDataFileName
+        , readUserConfigFile (getUserConfigFile "toolbox")
+        ]
 
     icon <- flip iconCreateFromFile sizeNull
         =<< case options ^. Options.iconFile of
@@ -110,3 +109,7 @@ main = getArgs >>= execParser optionsParser fullDesc >>= \options -> start $ do
         , help       := desc
         , on command := action
         ]
+
+    onConfigError msg = do
+        hPutStrLn stderr $ "Parsing configuration failed: " <> msg
+        exitFailure
