@@ -50,6 +50,7 @@ executable toolbox-gtk
   build-depends:
       base >=4.6 && <5
     , bytestring
+    , directory
     , filepath
     , process
     , transformers
@@ -97,6 +98,7 @@ executable toolbox-wx
   build-depends:
       base >=4.6 && <5
     , bytestring
+    , directory
     , filepath
     , process
     , transformers

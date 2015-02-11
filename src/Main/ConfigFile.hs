@@ -24,13 +24,14 @@ import Data.Bool (otherwise)
 import Data.Either (Either(Left, Right))
 import Data.Eq (Eq((==)))
 import Data.Foldable (Foldable, foldlM)
-import Data.Function ((.), const)
-import Data.Functor (Functor(fmap))
+import Data.Function (const)
+import Data.Functor ((<$>))
 import Data.Monoid (Monoid(mempty), (<>))
 import Data.String (String)
 import System.IO (IO, FilePath)
 
 import Data.ByteString (readFile)
+import System.Directory (doesFileExist)
 
 import Control.Lens ((^.))
 import Data.Aeson (eitherDecodeStrict')
@@ -84,9 +85,14 @@ readUserConfigFile
     -> IO (Either String MenuItems)
 readUserConfigFile = readConfigFileImpl (const "")
 
--- | Read and parse configuration file (JSON).
+-- | Read and parse configuration file (JSON). If configuration file doesn't
+-- exist then @Right 'mempty' :: Either String 'MenuItems'@ is returned.
 readConfigFile' :: FilePath -> IO (Either String MenuItems)
-readConfigFile' = fmap eitherDecodeStrict' . readFile
+readConfigFile' file = do
+    fileExist <- doesFileExist file
+    if fileExist
+        then eitherDecodeStrict' <$> readFile file
+        else return (Right mempty)
 
 -- | Gather menu items from various side-effect sources and handle error cases.
 getMenuItems
