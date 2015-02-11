@@ -1,11 +1,1 @@
-[ { "id": "firefox-profile-manager-no-remote"
-  , "name": "Firefox Profile Manager (no remote)"
-  , "description": "firefox -ProfileManager -no-remote"
-  , "command": "firefox -ProfileManager -no-remote &"
-  }
-, { "id": "rxvt"
-  , "name": "RXVT Unicode"
-  , "description": "RXVT Unicode"
-  , "command": "rxvt &"
-  }
-]
+[]

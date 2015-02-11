@@ -21,7 +21,11 @@ extra-source-files:
   , screenshot/*.png
 
 data-dir:               data
-data-files:             icons/*.png, toolbox-menu.json
+data-files:
+    icons/*.png
+  , toolbox-menu.json
+  -- ^ Empty configuration file.
+  , toolbox-menu.json.example
 
 flag pedantic
   description:          Pass additional warning flags to GHC.
