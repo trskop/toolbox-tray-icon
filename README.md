@@ -95,7 +95,8 @@ With sandboxing it would look as follows:
 mkdir -p toolbox-tray-icon/bin; cd toolbox-tray-icon
 wget https://github.com/trskop/toolbox-tray-icon/archive/master.tar.gz -O toolbox-tray-icon-master.tar.gz
 cabal sandbox init
-cabal install gtk2hs-buildtools cabal install --only-dependencies toolbox-tray-icon-master.tar.gz
+cabal install gtk2hs-buildtools
+cabal install --only-dependencies toolbox-tray-icon-master.tar.gz
 cabal install --symlink-bindir=bin toolbox-tray-icon-master.tar.gz
 ````
 
