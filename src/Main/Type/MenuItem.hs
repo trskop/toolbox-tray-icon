@@ -1,8 +1,11 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 module Main.Type.MenuItem
-    (MenuItem(..), MenuItems(..))
+    ( MenuItem(..)
+    , MenuItems(..)
+    )
   where
 
 import Data.Data (Data)
@@ -13,7 +16,15 @@ import Data.Typeable (Typeable)
 import GHC.Generics (Generic)
 import Text.Show (Show)
 
-import Data.Aeson (FromJSON, ToJSON)
+import Data.Aeson
+    ( FromJSON
+    , ToJSON(toEncoding, toJSON)
+    , defaultOptions
+#if MIN_VERSION_aeson(0,10,0)
+    , genericToEncoding
+#endif
+    , genericToJSON
+    )
 
 
 data MenuItem = MenuItem
@@ -25,13 +36,23 @@ data MenuItem = MenuItem
   deriving (Data, Generic, Show, Typeable)
 
 instance FromJSON MenuItem
-instance ToJSON MenuItem
+
+instance ToJSON MenuItem where
+    toJSON = genericToJSON defaultOptions
+#if MIN_VERSION_aeson(0,10,0)
+    toEncoding = genericToEncoding defaultOptions
+#endif
 
 newtype MenuItems = MenuItems [MenuItem]
   deriving (Data, Generic, Show, Typeable)
 
 instance FromJSON MenuItems
-instance ToJSON MenuItems
+
+instance ToJSON MenuItems where
+    toJSON = genericToJSON defaultOptions
+#if MIN_VERSION_aeson(0,10,0)
+    toEncoding = genericToEncoding defaultOptions
+#endif
 
 instance Monoid MenuItems where
     mempty = MenuItems []
