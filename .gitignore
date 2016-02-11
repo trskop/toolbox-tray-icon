@@ -39,23 +39,26 @@
 # {{{ Global/Linux.gitignore ##################################################
 *~
 
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
 # KDE directory preferences
 .directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
 # }}} Global/Linux.gitignore ##################################################
 
-# {{{ Global/TortoiseGit.gitignore ############################################
-# Project-level settings
-/.tgitconfig
-# }}} Global/TortoiseGit.gitignore ############################################
-
-# {{{ Global/vim.gitignore ####################################################
+# {{{ Global/Vim.gitignore ####################################################
+# swap
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
-*.un~
+# session
 Session.vim
+# temporary
 .netrwhist
 *~
-# }}} Global/vim.gitignore ####################################################
+# }}} Global/Vim.gitignore ####################################################
 
 # {{{ Global/Windows.gitignore ################################################
 # Windows image file caches
@@ -87,13 +90,12 @@ cabal-dev
 *.chs.h
 *.dyn_o
 *.dyn_hi
-.virtualenv
 .hpc
 .hsenv
 .cabal-sandbox/
 cabal.sandbox.config
-cabal.config
 *.prof
 *.aux
 *.hp
+.stack-work/
 # }}} Haskell.gitignore #######################################################
