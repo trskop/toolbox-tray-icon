@@ -1,6 +1,6 @@
 name:                   toolbox
 version:                0.1.0.0
-synopsis:               Tray icon with configurable popup menu
+synopsis:               Tray icon with configurable popup menu.
 -- description:
 homepage:               https://github.com/trskop/toolbox-tray-icon
 license:                BSD3
@@ -68,7 +68,7 @@ executable toolbox-gtk
     , xdg-basedir
 
     -- {{{ GTK-specific dependencies ------------------------------------------
-    , gtk >= 0.10.0
+    , gtk >=0.10.0
     -- ^ Lower bound is just u guess. Tested with gtk-0.13.4.
     -- }}} GTK-specific dependencies ------------------------------------------
 
@@ -116,8 +116,8 @@ executable toolbox-wx
     , xdg-basedir
 
     -- {{{ wx-specific dependencies -------------------------------------------
-    , wx >= 0.91.0.0
-    , wxcore >= 0.91.0.0
+    , wx >=0.91.0.0
+    , wxcore >=0.91.0.0
     -- ^ Lower bound is the latest version at the time of writing.
     -- }}} wx-specific dependencies -------------------------------------------
 
