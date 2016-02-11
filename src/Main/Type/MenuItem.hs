@@ -18,13 +18,23 @@ import Text.Show (Show)
 
 import Data.Aeson
     ( FromJSON
-    , ToJSON(toEncoding, toJSON)
-    , defaultOptions
+    , ToJSON
+        ( toJSON
 #if MIN_VERSION_aeson(0,10,0)
+        , toEncoding
+        )
+    , defaultOptions
     , genericToEncoding
+#else
+        )
 #endif
     , genericToJSON
     )
+#if !MIN_VERSION_aeson(0,10,0)
+-- Definition of defaultOptions is reexported by Data.Aeson module in aeson
+-- >=0.10.
+import Data.Aeson.Types (defaultOptions)
+#endif
 
 
 data MenuItem = MenuItem
