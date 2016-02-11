@@ -61,7 +61,7 @@ Most of it is self-explanatory, but few things should be pointed out.
 Building
 --------
 
-System dependencies:
+### System dependencies
 
 * [GTK 2.*][GTK Homepage]
 * [wxWidgets 2.9 or 3.0][wxWidgets Homepage]
@@ -71,6 +71,15 @@ On Ubuntu 14.04 above dependencies can be installed using:
 ````bash
 apt-get install libgtk2.0-dev libwxgtk3.0-dev libwxgtk-media3.0-dev
 ````
+
+### Bilding Using Stack
+
+```
+cd toolbox-tray-icon
+stack install
+```
+
+### Bilding Using Cabal
 
 GTK backend uses Haskell [gtk][Hackage: gtk] (tested only with version
 0.13.0.3) library and that requires
