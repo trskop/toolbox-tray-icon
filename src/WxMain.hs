@@ -1,4 +1,16 @@
 {-# LANGUAGE NoImplicitPrelude #-}
+-- |
+-- Module:       $HEADER$
+-- Description:  Tray icon with configurable popup menu that uses wxWidgets as
+--               a backend.
+-- Copyright:    (c) 2015 Peter Trško
+-- License:      BSD3
+--
+-- Maintainer:   peter.trsko@gmail.com
+-- Stability:    experimental
+-- Portability:  NoImplicitPrelude
+--
+-- Tray icon with configurable popup menu that uses wxWidgets as a backend.
 module Main (main)
   where
 

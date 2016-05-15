@@ -2,7 +2,7 @@
 -- |
 -- Module:       $HEADER$
 -- Description:  Lenses for types defined in Main.Type.MenuItem module.
--- Copyright:    (c) 2015, Peter Trško
+-- Copyright:    (c) 2015 Peter Trško
 -- License:      BSD3
 --
 -- Maintainer:   peter.trsko@gmail.com

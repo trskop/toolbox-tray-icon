@@ -2,15 +2,16 @@
 {-# LANGUAGE QuasiQuotes #-}
 -- |
 -- Module:       $HEADER$
--- Description:  Tray icon with configurable popup menu.
--- Copyright:    (c) 2015, Peter Trško
+-- Description:  Tray icon with configurable popup menu that uses GTK+ as a
+--               backend.
+-- Copyright:    (c) 2015 Peter Trško
 -- License:      BSD3
 --
 -- Maintainer:   peter.trsko@gmail.com
 -- Stability:    experimental
 -- Portability:  NoImplicitPrelude
 --
--- Tray icon with configurable popup menu.
+-- Tray icon with configurable popup menu that uses GTK+ as a backend.
 module Main (main)
   where
 

@@ -2,6 +2,17 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE NoImplicitPrelude #-}
+-- |
+-- Module:       $HEADER$
+-- Description:  Data types for describing popup menu item(s).
+-- Copyright:    (c) 2015 Peter Trško
+-- License:      BSD3
+--
+-- Maintainer:   peter.trsko@gmail.com
+-- Stability:    experimental
+-- Portability:  NoImplicitPrelude
+--
+-- Data types for describing popup menu item(s).
 module Main.Type.MenuItem
     ( MenuItem(..)
     , MenuItems(..)
