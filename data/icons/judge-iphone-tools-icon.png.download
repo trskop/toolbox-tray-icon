@@ -1,0 +1,23 @@
+# URL:
+#   http://www.iconarchive.com/show/iphone-icons-by-judge/tools-icon.html
+#
+# Artist:
+#   judge
+#   http://www.iconarchive.com/artist/judge.html
+#
+# Iconset:
+#   iPhone Icons (17 icons)
+#   http://www.iconarchive.com/show/iphone-icons-by-judge.html
+#
+# License:
+#   Free for non-commercial use.
+#
+# Commercial usage:
+#   Not allowed
+
+URL='http://icons.iconarchive.com/icons/judge/iphone/128/tools-icon.png'
+OUT_FILE='judge-iphone-tools-icon.png'
+MD5SUM='4e7568394242c685eec79a1554643af7'
+SHA1SUM='e92bcdf0991c467126065c0d54c0757133217b2e'
+SHA256SUM='2f98c721770f60bf6ac9800e845803f2cbc36204f630786f0f53a64a913bc357'
+TIMESTAMP='2015-01-17 13:34:09+01:00'
