@@ -76,7 +76,7 @@ apt-get install libgtk2.0-dev libwxgtk3.0-dev libwxgtk-media3.0-dev
 
 ```
 cd toolbox-tray-icon
-stack install
+stack --stack-yaml=stack-lts-5.yaml install
 ```
 
 ### Bilding Using Cabal
