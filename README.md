@@ -35,7 +35,7 @@ User configuration file is located in:
 
 Example configuration file:
 
-````json
+```json
 [ { "id": "firefox-profile-manager-no-remote"
   , "name": "Firefox Profile Manager (no remote)"
   , "description": "firefox -ProfileManager -no-remote"
@@ -47,7 +47,7 @@ Example configuration file:
   , "command": "rxvt &"
   }
 ]
-````
+```
 
 Most of it is self-explanatory, but few things should be pointed out.
 
@@ -68,14 +68,18 @@ Building
 
 On Ubuntu 14.04 above dependencies can be installed using:
 
-````bash
+```bash
 apt-get install libgtk2.0-dev libwxgtk3.0-dev libwxgtk-media3.0-dev
-````
+```
 
 ### Bilding Using Stack
 
+See [The Haskell Tool Stack: How to install][Stack: How to install] for the
+instruction on how to get stack for your specific OS and distribution.
+
+After getting source code of this project issue following command:
+
 ```
-cd toolbox-tray-icon
 stack --stack-yaml=stack-lts-5.yaml install
 ```
 
@@ -92,22 +96,25 @@ sure you have them on your system or install them.
 Ubuntu 14.0.4 has sufficiently new versions of [happy][Hackage: happy] and
 [alex][Hackage: alex] so they can be installed using system package manager:
 
-````bash
+```bash
 apt-get install alex happy
-````
+```
+
+It might be a good idea to use [Herbert V. Riedel's PPA repository][] on
+Ubuntu/Debian, instad of outdated distribution packages.
 
 To build this package, with above dependencies met, just download sources
 either using Git or by downloading an archive and then use cabal to install it.
 With sandboxing it would look as follows:
 
-````bash
+```bash
 mkdir -p toolbox-tray-icon/bin; cd toolbox-tray-icon
 wget https://github.com/trskop/toolbox-tray-icon/archive/master.tar.gz -O toolbox-tray-icon-master.tar.gz
 cabal sandbox init
 cabal install gtk2hs-buildtools
 cabal install --only-dependencies toolbox-tray-icon-master.tar.gz
 cabal install --symlink-bindir=bin toolbox-tray-icon-master.tar.gz
-````
+```
 
 Now you should be able to find two executables in `toolbox-tray-icon/bin`
 directory:
@@ -138,9 +145,15 @@ directory:
 [Haskell.org]:
   http://www.haskell.org
   "The Haskell Programming Language"
+[Herbert V. Riedel's PPA repository]:
+  https://launchpad.net/~hvr/+archive/ubuntu/ghc
+  "Herbert V. Riedel's PPA repository with GHC, cabal-install, alex and happy."
 [json.org]:
   http://json.org/
   "JSON definition and homepage"
+[Stack: How to install]:
+  http://docs.haskellstack.org/en/stable/README/#how-to-install
+  "How to install stack tool."
 [tl;dr Legal: BSD3]:
   https://tldrlegal.com/license/bsd-3-clause-license-%28revised%29
   "BSD 3-Clause License (Revised)"
