@@ -60,7 +60,7 @@ executable toolbox-gtk
     , transformers
 
     , aeson
-    , data-default-class ==0.0.*
+    , data-default-class >=0 && <0.2
     , endo
     , here
     , lens
@@ -69,7 +69,7 @@ executable toolbox-gtk
 
     -- {{{ GTK-specific dependencies ------------------------------------------
     , gtk >=0.10.0
-    -- ^ Lower bound is just u guess. Tested with gtk-0.13.4.
+    -- ^ Lower bound is just a guess. Tested with gtk-0.13.4.
     -- }}} GTK-specific dependencies ------------------------------------------
 
   ghc-options:          -Wall
@@ -108,7 +108,7 @@ executable toolbox-wx
     , transformers
 
     , aeson
-    , data-default-class ==0.0.*
+    , data-default-class >=0 && <0.2
     , endo
     , here
     , lens

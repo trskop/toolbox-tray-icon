@@ -1,0 +1,16 @@
+resolver: lts-9.21
+packages:
+  - '.'
+
+extra-deps:
+  - between-0.11.0.0
+  - endo-0.2.0.1
+  - wx-0.92.3.0
+  - wxc-0.92.3.0
+  - wxcore-0.92.3.0
+  - wxdirect-0.92.3.0
+
+flags: {}
+extra-package-dbs: []
+#system-ghc: true
+#compiler-check: newer-minor

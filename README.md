@@ -63,13 +63,20 @@ Building
 
 ### System dependencies
 
-* [GTK 2.*][GTK Homepage]
+* [GTK 2.\*][GTK Homepage]
 * [wxWidgets 2.9 or 3.0][wxWidgets Homepage]
 
-On Ubuntu 14.04 above dependencies can be installed using:
+On Debian above dependencies can be installed using:
 
 ```bash
-apt-get install libgtk2.0-dev libwxgtk3.0-dev libwxgtk-media3.0-dev
+apt-get install           \
+    libcairo2-dev         \
+    libglib2.0-dev        \
+    libgtk2.0-dev         \
+    libpango1.0-dev       \
+    libpangocairo-1.0-0   \
+    libwxgtk-media3.0-dev \
+    libwxgtk3.0-dev
 ```
 
 ### Bilding Using Stack
@@ -80,7 +87,7 @@ instruction on how to get stack for your specific OS and distribution.
 After getting source code of this project issue following command:
 
 ```
-stack --stack-yaml=stack-lts-5.yaml install
+stack --stack-yaml=stack-lts-9.yaml install
 ```
 
 ### Bilding Using Cabal
